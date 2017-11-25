@@ -1,0 +1,1 @@
+/home/notroot/lab/software/jdk1.8.0_151/bin/java -cp /home/notroot/apps/phoenix/lib/hsqldb.jar org.hsqldb.Server &

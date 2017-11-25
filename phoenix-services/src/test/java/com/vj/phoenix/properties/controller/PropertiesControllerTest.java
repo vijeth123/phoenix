@@ -1,5 +1,6 @@
 package com.vj.phoenix.properties.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vj.phoenix.properties.service.PropertiesService;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,13 +9,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.MediaType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+//@RunWith(SpringJUnit4ClassRunner.class)
 @RunWith(MockitoJUnitRunner.class)
+//@WebAppConfiguration
+//@ContextConfiguration({"classpath:config/all-services.xml"})
 public class PropertiesControllerTest {
 
     @InjectMocks
@@ -25,36 +38,25 @@ public class PropertiesControllerTest {
 
     private MockMvc mockMvc;
 
-    private String key;
-    private String defaultValue;
-    private String value;
+    private Map<String, String> map = new HashMap<>();
     private String appName;
-    private String envName;
 
     @Before
     public void setUp() throws Exception{
         appName = "data-ingestion";
-        envName = "dev";
-        key = "test.key";
-        defaultValue = "test-default-value";
-        value = "test-value";
-        mockMvc = MockMvcBuilders.standaloneSetup(propertiesController).build();
+        map.put("k1", "v1");
+        mockMvc = MockMvcBuilders.standaloneSetup(propertiesController).setMessageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
 
     @Test
     public void getPropertyValue() throws Exception {
-        Mockito.when(propertiesService.get(appName, envName, key)).thenReturn(value);
-        mockMvc.perform(get("/property/" + appName + "/" + envName + "/" + key))
-                .andExpect(status().isOk())
-                .andExpect(content().string(value));
-    }
+        Mockito.when(propertiesService.getPropertiesMap(appName)).thenReturn(map);
 
-    @Test
-    public void getPropertyValue1() throws Exception {
-        Mockito.when(propertiesService.get(appName, envName, key, defaultValue)).thenReturn(value);
-        mockMvc.perform(get("/property/" + appName + "/" + envName + "/" + key + "/" + defaultValue))
+        String result = new ObjectMapper().writeValueAsString(map);
+
+        mockMvc.perform(get("/property/" + appName))
                 .andExpect(status().isOk())
-                .andExpect(content().string(value));
+                .andExpect(content().string(result));
     }
 
 }

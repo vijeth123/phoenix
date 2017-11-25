@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class PropertiesService {
 
@@ -14,23 +16,8 @@ public class PropertiesService {
     @Autowired
     private PropertiesDao propertiesDao;
 
-    public String get(String appName, String envName, String key){
-        return get(appName, envName, key, null);
-    }
-
-    public String get(String appName, String envName, String key, String defaultValue){
-        String appRowKey = appName + "." + key;
-        String envRowKey = key;
-
-        if(!propertiesDao.containsProperty(appRowKey) && !propertiesDao.containsProperty(envRowKey)){
-            if(defaultValue != null){
-                LOGGER.warn("The passed key: [{}] is not present in the properties store. Hence returning the default value: [{}]", key, defaultValue);
-                return defaultValue;
-            }
-            LOGGER.warn("The passed key: [{}] is not present in the properties store. Hence returning 'null'", key);
-            return null;
-        }
-        return propertiesDao.getPropertyValue(envName, appRowKey, envRowKey);
+    public Map<String, String> getPropertiesMap(String appName){
+        return propertiesDao.getPropertiesMap(appName);
     }
 
 }

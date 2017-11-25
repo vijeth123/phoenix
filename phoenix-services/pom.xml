@@ -6,14 +6,14 @@
     <parent>
         <groupId>com.vj.phoenix</groupId>
         <artifactId>phoenix</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.vj.phoenix</groupId>
     <artifactId>phoenix-services</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <build>
         <plugins>
@@ -38,6 +38,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>com.vj.phoenix</groupId>
+            <artifactId>phoenix-common</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -92,6 +97,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 
 </project>

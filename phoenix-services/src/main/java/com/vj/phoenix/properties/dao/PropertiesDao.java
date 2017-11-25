@@ -1,6 +1,7 @@
 package com.vj.phoenix.properties.dao;
 
+import java.util.Map;
+
 public interface PropertiesDao {
-    String getPropertyValue(String envName, String appId, String propertyName);
-    boolean containsProperty(String propertyName);
+    Map<String, String> getPropertiesMap(String appName);
 }
