@@ -49,7 +49,7 @@
                                 <artifactItem>
                                     <groupId>org.jacoco</groupId>
                                     <artifactId>org.jacoco.agent</artifactId>
-                                    <version>0.7.2.201409121644</version>
+                                    <version>${jacoco.version}</version>
                                     <classifier>runtime</classifier>
                                     <outputDirectory>${project.build.directory}/agents</outputDirectory>
                                     <destFileName>jacoco-agent.jar</destFileName>
