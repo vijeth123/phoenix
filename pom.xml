@@ -35,10 +35,46 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.5.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-agent</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.jacoco</groupId>
+                                    <artifactId>org.jacoco.agent</artifactId>
+                                    <version>0.7.2.201409121644</version>
+                                    <classifier>runtime</classifier>
+                                    <outputDirectory>${project.build.directory}/agents</outputDirectory>
+                                    <destFileName>jacoco-agent.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.powermock</groupId>
+                                    <artifactId>powermock-module-javaagent</artifactId>
+                                    <version>1.6.1</version>
+                                    <outputDirectory>${project.build.directory}/agents</outputDirectory>
+                                    <destFileName>powermock-module-javaagent.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
-                    <argLine>-noverify -javaagent:${project.basedir}\org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=target\jacoco.exec -javaagent:${project.basedir}\powermock-module-javaagent-${powermock.version}.jar=destfile=target\jacoco.exec</argLine>
+                    <argLine>
+                        -noverify
+                        -javaagent:${project.build.directory}\agents\jacoco-agent.jar=destfile=target\jacoco.exec
+                        -javaagent:${project.build.directory}\agents\powermock-module-javaagent.jar=destfile=target\jacoco.exec</argLine>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -64,7 +100,6 @@
             </plugin>
         </plugins>
     </build>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
